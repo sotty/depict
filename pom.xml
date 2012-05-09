@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>DEPICT</artifactId>
+    <groupId>it.unibo.deis.lia</groupId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <chance.version>5.5.0-SNAPSHOT</chance.version>
+        <drools.version>5.5.0-SNAPSHOT</drools.version>
+    </properties>
+
+
+    <modules>
+        <module>activity-recognition</module>
+        <module>body-model</module>
+        <module>kinect</module>
+        <module>trace-dumper</module>
+    </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.OpenNI</groupId>
+                <artifactId>OpenNI</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+</project>

@@ -1,0 +1,22 @@
+package http.it.unibo.deis.lia.depict;
+
+import http.it.unibo.deis.lia.depict.DroolsKinectModel.Coords;
+
+global ObjectFactory factory;
+
+declare Human
+    @typesafe( false )
+end
+
+declare Coords
+    @role( event )
+//    @expires( 0 )
+end
+
+declare Spot extends org.drools.chance.ec.Event
+    @role( event )
+    @expires( 0 )
+
+    uid     : int
+    joint   : Joint
+end

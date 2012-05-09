@@ -1,0 +1,19 @@
+
+global java.util.Map map;
+
+declare Double
+@role(event)
+end
+
+rule "See"
+when
+    $a : Double() from accumulate (
+        $d: Double() over window:length( 10 )
+        sum( $d )
+    )
+then
+    System.out.println( "We have a sum " + $a );
+end
+
+
+

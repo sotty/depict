@@ -1,0 +1,347 @@
+
+package http.it.unibo.deis.lia.depict;
+
+
+import http.it.unibo.deis.lia.depict.audio.Voice;
+
+import org.drools.chance.factmodel.Imperfect;
+import org.drools.chance.factmodel.LinguisticPartition;
+
+import de.lab4inf.fuzzy.FuzzySet;
+import de.lab4inf.fuzzy.polygons.FuzzyTriangle;
+
+import org.drools.chance.degree.Degree;
+import org.drools.chance.degree.simple.SimpleDegree;
+import org.drools.chance.reteoo.ChanceActivation;
+import org.drools.chance.distribution.fuzzy.linguistic.Linguistic;
+import org.drools.chance.ChanceHelper;
+
+import org.drools.chance.ec.*;
+
+import java.util.*;
+
+
+
+declare AlertState extends org.drools.chance.ec.Fluent
+end
+
+declare AlertCheck extends org.drools.chance.ec.Event
+    fluent  : org.drools.chance.ec.Fluent       @key
+end
+
+declare OnAlert extends org.drools.chance.ec.Event
+    @role( event )
+
+    deadline    : String
+end
+
+declare OffAlert extends org.drools.chance.ec.Event
+    @role( event )
+    deg : Degree
+end
+
+query alertState( AlertState $al )
+    $al := AlertState()
+end
+
+query holdsAlert()
+    alertState( $al ; )
+    holdsNow( $al ; )
+end
+
+query defHoldsAlert()
+    alertState( $al ; )
+    holds( $al ; )
+end
+
+
+
+declare enum HandHeight
+@LinguisticPartition
+
+	DOWN( "down", new de.lab4inf.fuzzy.polygons.FuzzyTrapez( -10, 0, 2, 6 ) ),
+
+	UP( "up", new de.lab4inf.fuzzy.polygons.FuzzyTrapez( 2, 6, 10, 20 ) );
+
+    label : String
+
+    set   : FuzzySet
+
+end
+
+
+declare JointPositionFluent extends org.drools.chance.ec.Fluent
+    joint   : Joint
+end
+
+declare LeftHandUp extends JointPositionFluent
+    uid     : int
+end
+
+query leftHandUp( LeftHandUp $f, int $id )
+    $f := LeftHandUp( $id := uid )
+end
+
+
+declare LeftHandDown extends JointPositionFluent
+    uid     : int
+end
+
+query leftHandDown( LeftHandDown $f, int $id )
+    $f := LeftHandDown( $id := uid )
+end
+
+
+
+
+declare RightHandUp extends JointPositionFluent
+    uid     : int
+end
+
+query rightHandUp( RightHandUp $f, int $id )
+    $f := RightHandUp( $id := uid )
+end
+
+
+declare RightHandDown extends JointPositionFluent
+    uid     : int
+end
+
+query rightHandDown( RightHandDown $f, int $id )
+    $f := RightHandDown( $id := uid )
+end
+
+
+
+rule "Init Left Hand Fluents"
+when
+    $lh : LeftHand( $uid : refUidInteger )
+    not JointPositionFluent( joint == $lh )
+then
+    LeftHandUp hup = new LeftHandUp();
+        hup.setId( java.util.UUID.randomUUID().toString() );
+        hup.setHist( new java.util.LinkedHashMap() );
+        hup.setUid( $uid );
+        hup.setJoint( $lh );
+    LeftHandDown hdn = new LeftHandDown();
+        hdn.setId( java.util.UUID.randomUUID().toString() );
+        hdn.setHist( new java.util.LinkedHashMap() );
+        hdn.setUid( $uid );
+        hdn.setJoint( $lh );
+
+    insert( hup );
+    insert( hdn );
+end
+
+rule "Init Right Hand Fluents"
+when
+    $lh : RightHand( $uid : refUidInteger )
+    not JointPositionFluent( joint == $lh )
+then
+    RightHandUp hup = new RightHandUp();
+        hup.setId( java.util.UUID.randomUUID().toString() );
+        hup.setHist( new java.util.LinkedHashMap() );
+        hup.setUid( $uid );
+        hup.setJoint( $lh );
+    RightHandDown hdn = new RightHandDown();
+        hdn.setId( java.util.UUID.randomUUID().toString() );
+        hdn.setHist( new java.util.LinkedHashMap() );
+        hdn.setUid( $uid );
+        hdn.setJoint( $lh );
+
+    insert( hup );
+    insert( hdn );
+end
+
+rule "Clean Position Fluents"
+when
+    $jpf : JointPositionFluent( $j : joint )
+     not   Joint( this == $j )
+then
+    retract( $jpf );
+end
+
+
+
+
+
+
+
+rule "Init Op"
+when
+then
+    AlertState al = new AlertState();
+        al.setId( java.util.UUID.randomUUID().toString() );
+        al.setHist( new LinkedHashMap() );
+    insert( al );
+end
+
+
+rule "Trigger Op"
+when
+    $s : String( )
+then
+    retract( $s );
+    insert( new OnAlert( new Date().getTime(), $s ) );
+end
+//
+rule "Alert On"
+when
+    $on  : OnAlert( $t : start )
+    ?alertState( $fluent ; )
+then
+    Voice.speak( "Start" );
+    System.out.println( "Start Alert recognition condition !!! ");
+
+    insert( new Declip( $t, $on, $fluent, chance.getDegree() ) );
+end
+
+
+rule "Alert Off"
+when
+//    $on  : OnAlert( )
+    $off : OffAlert( $t : start, deg ~holds true )
+    ?alertState( $fluent ; )
+then
+//    retract( $on );
+    retract( $off );
+    System.out.println( "***** KLIPPING " + chance.getDegree() );
+    insert( new Clip( $t, $off, $fluent, chance.getDegree() ) );
+end
+
+
+
+/**
+    The alert state has not been totally cancelled after the deadline
+*/
+rule "Timoeout"
+timer( expr: $deadline, 0 ; )
+when
+    $on : OnAlert( $deadline : deadline )
+//    not   OffAlert( this after[0,3s] $on )
+then
+    retract( $on );
+    System.out.println( "Timeout, will check for alert state" );
+    insert( new AlertCheck() );
+end
+
+
+
+
+rule "Failure"
+salience 10
+when
+    $al : AlertCheck()
+    AlertState( status ~ not holds [family=GODEL] false )
+then
+    retract( $al );
+    Voice.speak( "This is really bad" );
+
+    System.out.println( "FAIL! " );
+
+    insert( new OffAlert( new Date().getTime(), SimpleDegree.TRUE ) );
+end
+
+
+
+rule "Partial"
+when
+    AlertState( status ~holds true )
+    $al : AlertCheck()
+then
+    retract( $al );
+    Voice.speak( "Alarm! " );
+
+    System.out.println( "BEWARE! OFF " + chance.getDegree() );
+
+    insert( new OffAlert( new Date().getTime(), SimpleDegree.TRUE ) );
+end
+
+
+
+rule "Success"
+when
+    $on : OnAlert( $deadline : deadline )
+    $al : AlertState( status ~ not holds [family=GODEL] true)
+then
+    System.out.println( "SUCCESS " );
+    Voice.speak( "Great" );
+    retract( $on );
+end
+
+
+
+
+
+
+
+
+
+rule "Left Hand Position Down"
+when
+              Human( $Y0 : comYFloat )
+    $event  : Spot( $uid : uid, $j : joint, $t : start )
+              LeftHand( ( coordYFloat - $Y0 ) ~is [label=down] HandHeight.DOWN ) from $j
+    ?leftHandDown( $fluent, $uid ; )
+    ?holdsAlert( )
+then
+    System.out.println( "WE HAVE A DOWN L " + chance.getDegree( "down" ) + " on " + $j );
+    insert( new Declip( $t, $event, $fluent, chance.getDegree( "down" ) ) );
+end
+
+rule "Hand Position Down"
+when
+              Human( $Y0 : comYFloat )
+    $event  : Spot( $uid : uid, $j : joint, $t : start )
+              RightHand( ( coordYFloat - $Y0 ) ~is [label=down] HandHeight.DOWN ) from $j
+    ?rightHandDown( $fluent, $uid ; )
+    ?holdsAlert( )
+then
+    System.out.println( "WE HAVE A DOWN R " + chance.getDegree( "down" ) + " on " + $j );
+    insert( new Declip( $t, $event, $fluent, chance.getDegree( "down" ) ) );
+end
+
+rule "Left Hand Position Up"
+when
+              Human( $Y0 : comYFloat )
+    $event  : Spot( $uid : uid, $j : joint, $t : start )
+              LeftHand( ( coordYFloat - $Y0 ) ~is [label=up] HandHeight.UP ) from $j
+    ?leftHandUp( $fluent, $uid ; )
+    ?holdsAlert( )
+then
+    System.out.println( "WE HAVE A UP L " + chance.getDegree( ) );
+    insert( new Declip( $t, $event, $fluent, chance.getDegree( "up" ) ) );
+end
+
+rule "Right Hand Position Up"
+when
+              Human( $Y0 : comYFloat )
+    $event  : Spot( $uid : uid, $j : joint, $t : start )
+              RightHand( ( coordYFloat - $Y0 ) ~is [label=up] HandHeight.UP ) from $j
+    ?rightHandUp( $fluent, $uid ; )
+    ?holdsAlert( )
+then
+    System.out.println( "WE HAVE A UP R " + chance.getDegree( ) );
+    insert( new Declip( $t, $event, $fluent, chance.getDegree( "up" ) ) );
+end
+
+
+
+//
+rule "Rec"
+salience -1000
+when
+    $m1 : MVII( type == LeftHandUp.class, status ~== true )
+    $m2 : MVII( type == RightHandUp.class,
+                        // start > $m1.start,
+                status ~== true )
+then
+    // DECLIP SOME HIGHER LEVEL FLUENT ....
+
+    System.out.println( "***** WE have a Complex act " + chance.getDegree(  ) );
+    System.out.println( "M1 " + $m1.getStatus() );
+    System.out.println( "M2 " + $m2.getStatus() );
+    System.out.println( "*************************** " );
+
+    insert( new OffAlert( new Date().getTime(), chance.getDegree() ) );
+end

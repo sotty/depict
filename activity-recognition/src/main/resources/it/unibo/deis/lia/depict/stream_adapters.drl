@@ -1,0 +1,321 @@
+package http.it.unibo.deis.lia.depict;
+
+import http.it.unibo.deis.lia.depict.DroolsKinectModel.Coords;
+
+import java.util.Date;
+
+
+rule "User Creation"
+when
+    $i : Integer() from entry-point "userEP"
+then
+    Human body = factory.createHumanImpl();
+        body.addUid( $i );
+    insertLogical( body );
+end
+
+rule "Body Initialization"
+when
+    $h : Human( $id: uidInteger, $joints : this.hasJointInferred )
+    $j : Joint( ) from $joints
+then
+    $j.setRefUidInteger( $id );
+    insertLogical( $j );
+end
+
+
+
+declare window CenterOfMassStream
+    Coords() over window:batch( 10 ) from entry-point "userEP"
+end
+
+rule "CoM"
+no-loop
+when
+    $h : Human( $id : uidInteger )
+         accumulate (
+                 $c :  Coords( id == $id ) from window CenterOfMassStream,
+                 $x :  average( $c.x ),
+                 $y :  average( $c.y ),
+                 $z :  average( $c.z ),
+                 $a :  average( $c.a )
+             )
+then
+    System.out.println( "COM " + $id + " in  " + $x + " : " + $y + " : " + $z );
+    modify( $h ) {
+        setComXFloat( $x.floatValue() ),
+        setComYFloat( $y.floatValue() ),
+        setComZFloat( $z.floatValue() ):
+    }
+end
+
+
+
+declare window RightHandStream
+    Coords() over window:batch( 10 ) from entry-point "rightHandEP"
+end
+
+rule "Right Hand"
+no-loop
+when
+    $h : RightHand( $id : refUidInteger )
+         accumulate (
+                 $c :  Coords( id == $id ) from window RightHandStream,
+                 $x :  average( $c.x ),
+                 $y :  average( $c.y ),
+                 $z :  average( $c.z ),
+                 $a :  average( $c.a )
+             )
+then
+    System.out.println( "RH " + $id + " in  " + $x + " : " + $y + " : " + $z + " // " + $a );
+    modify( $h ) {
+        setCoordXFloat( $x.floatValue() ),
+        setCoordYFloat( $y.floatValue() ),
+        setCoordZFloat( $z.floatValue() ),
+        setCoordAlphaFloat( $a.floatValue() );
+    }
+    insert( new Spot( new Date().getTime(), $id, $h ) );
+end
+
+
+
+
+declare window LeftHandStream
+    Coords() over window:batch( 10 ) from entry-point "leftHandEP"
+end
+
+rule "Left Hand"
+no-loop
+when
+    $h : LeftHand( $id : refUidInteger )
+         accumulate (
+                 $c :  Coords( id == $id ) from window LeftHandStream,
+                 $x :  average( $c.x ),
+                 $y :  average( $c.y ),
+                 $z :  average( $c.z ),
+                 $a :  average( $c.a )
+             )
+then
+    System.out.println( "LH " + $id + " in  " + $x + " : " + $y + " : " + $z + " // " + $a );
+    modify( $h ) {
+        setCoordXFloat( $x.floatValue() ),
+        setCoordYFloat( $y.floatValue() ),
+        setCoordZFloat( $z.floatValue() ),
+        setCoordAlphaFloat( $a.floatValue() );
+    }
+    insert( new Spot( new Date().getTime(), $id, $h ) );
+end
+
+
+
+declare window NeckStream
+    Coords() over window:batch( 10 ) from entry-point "neckEP"
+end
+
+
+rule "Neck"
+no-loop
+when
+    $h : Neck( $id : refUidInteger )
+         accumulate (
+                 $c :  Coords( id == $id ) from window NeckStream,
+                 $x :  average( $c.x ),
+                 $y :  average( $c.y ),
+                 $z :  average( $c.z ),
+                 $a :  average( $c.a )
+             )
+
+then
+    System.out.println( new java.util.Date().getTime() + " >> Neck " + $id + " in  " + $x + " : " + $y + " : " + $z + " // " + $a );
+    modify( $h ) {
+        setCoordXFloat( $x.floatValue() ),
+        setCoordYFloat( $y.floatValue() ),
+        setCoordZFloat( $z.floatValue() ),
+        setCoordAlphaFloat( $a.floatValue() );
+    }
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rule "Head"
+when
+    $c : Coords( $id : id ) from entry-point "headEP"
+    $h : Head( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+
+
+rule "Torso"
+when
+    $c : Coords( $id : id ) from entry-point "torsoEP"
+    $h : Torso( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Left Shoulder"
+when
+    $c : Coords( $id : id ) from entry-point "leftShoulderEP"
+    $h : LeftShoulder( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Left Elbow"
+when
+    $c : Coords( $id : id ) from entry-point "leftElbowEP"
+    $h : LeftElbow( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Left Hip"
+when
+    $c : Coords( $id : id ) from entry-point "leftHipEP"
+    $h : LeftHip( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Left Knee"
+when
+    $c : Coords( $id : id ) from entry-point "leftKneeEP"
+    $h : LeftKnee( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Left Foot"
+when
+    $c : Coords( $id : id ) from entry-point "leftFootEP"
+    $h : LeftFoot( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Right Shoulder"
+when
+    $c : Coords( $id : id ) from entry-point "rightShoulderEP"
+    $h : RightShoulder( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Right Elbow"
+when
+    $c : Coords( $id : id ) from entry-point "rightElbowEP"
+    $h : RightElbow( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+
+rule "Right Hip"
+when
+    $c : Coords( $id : id ) from entry-point "rightHipEP"
+    $h : RightHip( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Right Knee"
+when
+    $c : Coords( $id : id ) from entry-point "rightKneeEP"
+    $h : RightKnee( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end
+
+rule "Right Foot"
+when
+    $c : Coords( $id : id ) from entry-point "rightFootEP"
+    $h : RightFoot( refUidInteger == $id )
+then
+    retract( $c );
+    modify( $h ) {
+        setCoordXFloat( $c.x ),
+        setCoordYFloat( $c.y ),
+        setCoordZFloat( $c.z ),
+        setCoordAlphaFloat( $c.a );
+    }
+end

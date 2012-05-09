@@ -1,0 +1,31 @@
+
+global java.util.Map map;
+
+declare Double
+@role(event)
+end
+
+declare window Streem
+    Double() over window:stream( 10 ) from entry-point data
+end
+
+query flooow( Double $x )
+    $x := Double() from accumulate (
+        $d: Double()
+            from window Streem,
+        sum( $d )
+    )
+end
+
+rule "See"
+when
+//    flooow( $a ; )
+    $a : Double() from accumulate (
+        $d: Double()
+            from window Streem,
+        sum( $d )
+    )
+then
+    System.out.println( "We have a smoothie " + $a );
+end
+

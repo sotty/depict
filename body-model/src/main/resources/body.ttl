@@ -1,0 +1,444 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://it.unibo.deis.lia.depict#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://it.unibo.deis.lia.depict> .
+
+<http://it.unibo.deis.lia.depict> rdf:type owl:Ontology .
+
+
+#################################################################
+#
+#    Datatypes
+#
+#################################################################
+
+
+
+
+#################################################################
+#
+#    Object Properties
+#
+#################################################################
+
+
+###  http://depict.lia.deis.unibo.it#hasJoint
+
+<http://depict.lia.deis.unibo.it#hasJoint> rdf:type owl:ObjectProperty ;
+                                           
+                                           rdfs:domain <http://depict.lia.deis.unibo.it#Human> ;
+                                           
+                                           rdfs:range <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+
+
+#################################################################
+#
+#    Data properties
+#
+#################################################################
+
+
+###  http://depict.lia.deis.unibo.it#coordAlpha
+
+<http://depict.lia.deis.unibo.it#coordAlpha> rdf:type owl:DatatypeProperty ;
+                                             
+                                             rdfs:domain <http://depict.lia.deis.unibo.it#Joint> ;
+                                             
+                                             rdfs:range xsd:float .
+
+
+
+###  http://depict.lia.deis.unibo.it#coordX
+
+<http://depict.lia.deis.unibo.it#coordX> rdf:type owl:DatatypeProperty ;
+                                         
+                                         rdfs:domain <http://depict.lia.deis.unibo.it#Joint> ;
+                                         
+                                         rdfs:range xsd:float ;
+                                         
+                                         rdfs:subPropertyOf owl:topDataProperty .
+
+
+
+###  http://depict.lia.deis.unibo.it#coordY
+
+<http://depict.lia.deis.unibo.it#coordY> rdf:type owl:DatatypeProperty ;
+                                         
+                                         rdfs:domain <http://depict.lia.deis.unibo.it#Joint> ;
+                                         
+                                         rdfs:range xsd:float .
+
+
+
+###  http://depict.lia.deis.unibo.it#coordZ
+
+<http://depict.lia.deis.unibo.it#coordZ> rdf:type owl:DatatypeProperty ;
+                                         
+                                         rdfs:domain <http://depict.lia.deis.unibo.it#Joint> ;
+                                         
+                                         rdfs:range xsd:float .
+
+
+
+###  http://depict.lia.deis.unibo.it#uid
+
+<http://depict.lia.deis.unibo.it#uid> rdf:type owl:DatatypeProperty ;
+                                      
+                                      rdfs:domain <http://depict.lia.deis.unibo.it#Human> ;
+                                      
+                                      rdfs:range xsd:int .
+
+
+
+###  http://it.unibo.deis.lia.depict#comX
+
+:comX rdf:type owl:DatatypeProperty ;
+      
+      rdfs:domain <http://depict.lia.deis.unibo.it#Human> ;
+      
+      rdfs:range xsd:float .
+
+
+
+###  http://it.unibo.deis.lia.depict#comY
+
+:comY rdf:type owl:DatatypeProperty ;
+      
+      rdfs:domain <http://depict.lia.deis.unibo.it#Human> ;
+      
+      rdfs:range xsd:float .
+
+
+
+###  http://it.unibo.deis.lia.depict#comZ
+
+:comZ rdf:type owl:DatatypeProperty ;
+      
+      rdfs:domain <http://depict.lia.deis.unibo.it#Human> ;
+      
+      rdfs:range xsd:float .
+
+
+
+###  http://it.unibo.deis.lia.depict#refUid
+
+:refUid rdf:type owl:DatatypeProperty ;
+        
+        rdfs:domain <http://depict.lia.deis.unibo.it#Joint> ;
+        
+        rdfs:range xsd:int .
+
+
+
+
+
+#################################################################
+#
+#    Classes
+#
+#################################################################
+
+
+###  http://depict.lia.deis.unibo.it#Elbow
+
+<http://depict.lia.deis.unibo.it#Elbow> rdf:type owl:Class ;
+                                        
+                                        rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Foot
+
+<http://depict.lia.deis.unibo.it#Foot> rdf:type owl:Class ;
+                                       
+                                       rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Hand
+
+<http://depict.lia.deis.unibo.it#Hand> rdf:type owl:Class ;
+                                       
+                                       rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Head
+
+<http://depict.lia.deis.unibo.it#Head> rdf:type owl:Class ;
+                                       
+                                       rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Hip
+
+<http://depict.lia.deis.unibo.it#Hip> rdf:type owl:Class ;
+                                      
+                                      rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Human
+
+<http://depict.lia.deis.unibo.it#Human> rdf:type owl:Class ;
+                                        
+                                        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#RightKnee> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#RightFoot> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#RightHip> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#LeftFoot> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#uid> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                          owl:onDataRange xsd:int
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#Torso> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#LeftKnee> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#LeftHip> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :comY ;
+                                                          owl:cardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :comZ ;
+                                                          owl:cardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#LeftElbow> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :comX ;
+                                                          owl:cardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#RightElbow> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#LeftShoulder> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#Head> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#LeftHand> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#Neck> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#RightShoulder> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#hasJoint> ;
+                                                          owl:onClass <http://depict.lia.deis.unibo.it#RightHand> ;
+                                                          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] .
+
+
+
+###  http://depict.lia.deis.unibo.it#Joint
+
+<http://depict.lia.deis.unibo.it#Joint> rdf:type owl:Class ;
+                                        
+                                        rdfs:subClassOf [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#coordZ> ;
+                                                          owl:maxCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#coordAlpha> ;
+                                                          owl:maxCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty :refUid ;
+                                                          owl:cardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#coordX> ;
+                                                          owl:maxCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] ,
+                                                        [ rdf:type owl:Restriction ;
+                                                          owl:onProperty <http://depict.lia.deis.unibo.it#coordY> ;
+                                                          owl:maxCardinality "1"^^xsd:nonNegativeInteger
+                                                        ] .
+
+
+
+###  http://depict.lia.deis.unibo.it#Knee
+
+<http://depict.lia.deis.unibo.it#Knee> rdf:type owl:Class ;
+                                       
+                                       rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#LeftElbow
+
+<http://depict.lia.deis.unibo.it#LeftElbow> rdf:type owl:Class ;
+                                            
+                                            rdfs:subClassOf <http://depict.lia.deis.unibo.it#Elbow> .
+
+
+
+###  http://depict.lia.deis.unibo.it#LeftFoot
+
+<http://depict.lia.deis.unibo.it#LeftFoot> rdf:type owl:Class ;
+                                           
+                                           rdfs:subClassOf <http://depict.lia.deis.unibo.it#Foot> .
+
+
+
+###  http://depict.lia.deis.unibo.it#LeftHand
+
+<http://depict.lia.deis.unibo.it#LeftHand> rdf:type owl:Class ;
+                                           
+                                           rdfs:subClassOf <http://depict.lia.deis.unibo.it#Hand> .
+
+
+
+###  http://depict.lia.deis.unibo.it#LeftHip
+
+<http://depict.lia.deis.unibo.it#LeftHip> rdf:type owl:Class ;
+                                          
+                                          rdfs:subClassOf <http://depict.lia.deis.unibo.it#Hip> .
+
+
+
+###  http://depict.lia.deis.unibo.it#LeftKnee
+
+<http://depict.lia.deis.unibo.it#LeftKnee> rdf:type owl:Class ;
+                                           
+                                           rdfs:subClassOf <http://depict.lia.deis.unibo.it#Knee> .
+
+
+
+###  http://depict.lia.deis.unibo.it#LeftShoulder
+
+<http://depict.lia.deis.unibo.it#LeftShoulder> rdf:type owl:Class ;
+                                               
+                                               rdfs:subClassOf <http://depict.lia.deis.unibo.it#Shoulder> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Neck
+
+<http://depict.lia.deis.unibo.it#Neck> rdf:type owl:Class ;
+                                       
+                                       rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#RightElbow
+
+<http://depict.lia.deis.unibo.it#RightElbow> rdf:type owl:Class ;
+                                             
+                                             rdfs:subClassOf <http://depict.lia.deis.unibo.it#Elbow> .
+
+
+
+###  http://depict.lia.deis.unibo.it#RightFoot
+
+<http://depict.lia.deis.unibo.it#RightFoot> rdf:type owl:Class ;
+                                            
+                                            rdfs:subClassOf <http://depict.lia.deis.unibo.it#Foot> .
+
+
+
+###  http://depict.lia.deis.unibo.it#RightHand
+
+<http://depict.lia.deis.unibo.it#RightHand> rdf:type owl:Class ;
+                                            
+                                            rdfs:subClassOf <http://depict.lia.deis.unibo.it#Hand> .
+
+
+
+###  http://depict.lia.deis.unibo.it#RightHip
+
+<http://depict.lia.deis.unibo.it#RightHip> rdf:type owl:Class ;
+                                           
+                                           rdfs:subClassOf <http://depict.lia.deis.unibo.it#Hip> .
+
+
+
+###  http://depict.lia.deis.unibo.it#RightKnee
+
+<http://depict.lia.deis.unibo.it#RightKnee> rdf:type owl:Class ;
+                                            
+                                            rdfs:subClassOf <http://depict.lia.deis.unibo.it#Knee> .
+
+
+
+###  http://depict.lia.deis.unibo.it#RightShoulder
+
+<http://depict.lia.deis.unibo.it#RightShoulder> rdf:type owl:Class ;
+                                                
+                                                rdfs:subClassOf <http://depict.lia.deis.unibo.it#Shoulder> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Shoulder
+
+<http://depict.lia.deis.unibo.it#Shoulder> rdf:type owl:Class ;
+                                           
+                                           rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+###  http://depict.lia.deis.unibo.it#Torso
+
+<http://depict.lia.deis.unibo.it#Torso> rdf:type owl:Class ;
+                                        
+                                        rdfs:subClassOf <http://depict.lia.deis.unibo.it#Joint> .
+
+
+
+
+###  Generated by the OWL API (version 3.2.3.1824) http://owlapi.sourceforge.net
+

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>it.unibo.deis.lia</groupId>
+        <artifactId>DEPICT</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>activity-recognition</artifactId>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>5.5.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-chance-core</artifactId>
+            <version>5.5.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>it.unibo.deis.lia</groupId>
+            <artifactId>body-model</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>freetts</groupId>
+            <artifactId>freetts</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.speech</groupId>
+            <artifactId>jsapi</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>freetts</groupId>
+            <artifactId>cmu_us_kal</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>freetts</groupId>
+            <artifactId>cmu_time_awb</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>freetts</groupId>
+            <artifactId>cmudict04</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>freetts</groupId>
+            <artifactId>cmulex</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>freetts</groupId>
+            <artifactId>cmutimelex</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>freetts</groupId>
+            <artifactId>en_us</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
+
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>tts</id>
+            <url>http://maven.it.su.se/it.su.se/maven2</url>
+        </repository>
+    </repositories>
+
+</project>

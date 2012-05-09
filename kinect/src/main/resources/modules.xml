@@ -1,0 +1,18 @@
+<Modules>
+    <Module path="/usr/lib/libnimMockNodes.so" />
+    <Module path="/usr/lib/libnimCodecs.so" />
+    <Module path="/usr/lib/libnimRecorder.so" />
+    <Module path="/usr/lib/libXnDeviceSensorV2.so" configDir="/usr/etc/primesense" />
+    <Module path="/usr/lib/libXnDeviceFile.so" configDir="/usr/etc/primesense" />
+    <Module path="/usr/lib/libXnVFeatures_1_3_0.so" configDir="/usr/etc/primesense/Features_1_3_0" />
+    <Module path="/usr/lib/libXnVFeatures_1_3_1.so" configDir="/usr/etc/primesense/Features_1_3_1" />
+    <Module path="/usr/lib/libXnVFeatures_1_4_1.so" configDir="/usr/etc/primesense/Features_1_4_1" />
+    <Module path="/usr/lib/libXnVFeatures_1_4_2.so" configDir="/usr/etc/primesense/Features_1_4_2" />
+    <Module path="/usr/lib/libXnVFeatures_1_5_2.so" configDir="/usr/etc/primesense/Features_1_5_2" />
+    <Module path="/usr/lib/libXnVHandGenerator_1_3_0.so" configDir="/usr/etc/primesense/Hands_1_3_0" />
+    <Module path="/usr/lib/libXnVHandGenerator_1_3_1.so" configDir="/usr/etc/primesense/Hands_1_3_1" />
+    <Module path="/usr/lib/libXnVHandGenerator_1_4_1.so" configDir="/usr/etc/primesense/Hands_1_4_1" />
+    <Module path="/usr/lib/libXnVHandGenerator_1_4_2.so" configDir="/usr/etc/primesense/Hands_1_4_2" />
+    <Module path="/usr/lib/libXnVHandGenerator_1_5_2.so" configDir="/usr/etc/primesense/Hands_1_5_2" />
+    <Module path="/usr/lib/libXnDeviceSensorV2KM.so" configDir="/usr/etc/primesense" />
+</Modules>
