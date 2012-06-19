@@ -1,4 +1,4 @@
-package org.OpenNI.Samples.UserTracker.observers;
+package http.it.unibo.deis.lia.depict.observers;
 
 
 import http.it.unibo.deis.lia.depict.KinectModel;

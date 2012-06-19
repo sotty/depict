@@ -1,6 +1,5 @@
-package org.OpenNI.Samples.UserTracker;
+package http.it.unibo.deis.lia.depict;
 
-import http.it.unibo.deis.lia.depict.KinectModel;
 import org.OpenNI.*;
 
 import java.awt.*;
@@ -12,11 +11,8 @@ import java.util.Map;
 
 public class TrackPanel extends Component {
 
-    private DepthGenerator depthGen;
-    private UserGenerator userGen;
-    private SkeletonCapability skeletonCap;
 
-    private KinectModel model;
+   private AbstractUserTracker tracker;
 
     private byte[] imgbytes;
     private float histogram[];
@@ -36,13 +32,10 @@ public class TrackPanel extends Component {
     Color colors[] = {Color.RED, Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.PINK, Color.YELLOW, Color.WHITE};
 
 
-    public TrackPanel( UserGenerator userGen, DepthGenerator depthGen, SkeletonCapability skeletonCap, KinectModel model ) throws GeneralException {
-        this.userGen = userGen;
-        this.depthGen = depthGen;
-        this.skeletonCap = skeletonCap;
-        this.model = model;
+    public TrackPanel( AbstractUserTracker tracker ) throws GeneralException {
+        this.tracker = tracker;
 
-        DepthMetaData depthMD = depthGen.getMetaData();
+        DepthMetaData depthMD = tracker.getDepthGenMetaData();
 
         histogram = new float[10000];
         width = depthMD.getFullXRes();
@@ -71,7 +64,7 @@ public class TrackPanel extends Component {
 
 
     public void drawSkeleton( Graphics g, int user ) throws StatusException {
-        Map<SkeletonJoint, SkeletonJointPosition> dict = model.getSkeleton( new Integer( user ) );
+        Map<SkeletonJoint, SkeletonJointPosition> dict = tracker.getSkeleton( new Integer( user ) );
 
         drawLine(g, dict, SkeletonJoint.HEAD, SkeletonJoint.NECK);
 
@@ -130,8 +123,8 @@ public class TrackPanel extends Component {
 
     void updateBackground() {
 
-        DepthMetaData depthMD = depthGen.getMetaData();
-        SceneMetaData sceneMD = userGen.getUserPixels(0);
+        DepthMetaData depthMD = tracker.getDepthGenMetaData();
+        SceneMetaData sceneMD = tracker.getUserPixels( 0 );
 
         ShortBuffer scene = sceneMD.getData().createShortBuffer();
         ShortBuffer depth = depthMD.getData().createShortBuffer();
@@ -183,50 +176,38 @@ public class TrackPanel extends Component {
 
             g.drawImage(bimg, 0, 0, null);
         }
-        try
-        {
-            int[] users = userGen.getUsers();
-            for (int i = 0; i < users.length; ++i)
-            {
-                Color c = colors[users[i]%colors.length];
-                c = new Color(255-c.getRed(), 255-c.getGreen(), 255-c.getBlue());
+        try {
+            int[] users = tracker.getUsers();
+            for (int i = 0; i < users.length; ++i) {
+                Color c = colors[ users[i] % colors.length ];
+                c = new Color( 255-c.getRed(), 255-c.getGreen(), 255-c.getBlue() );
 
                 g.setColor(c);
-                if (drawSkeleton && skeletonCap.isSkeletonTracking(users[i]))
-                {
+                if ( drawSkeleton && tracker.isSkeletonTracking( users[i] ) ) {
                     drawSkeleton(g, users[i]);
                 }
 
-                if (printID)
-                {
+                if ( printID ) {
 
-                    Point3D com = depthGen.convertRealWorldToProjective(userGen.getUserCoM(users[i]));
+                    Point3D com = tracker.convertRealWorldToProjective( tracker.getUserCoM( users[i] ) );
                     String label = null;
-                    if (!printState)
-                    {
+                    if ( ! printState) {
                         label = new String(""+users[i]);
-                    }
-                    else if (skeletonCap.isSkeletonTracking(users[i]))
-                    {
+                    } else if ( tracker.isSkeletonTracking( users[i] ) ) {
                         // Tracking
                         label = new String(users[i] + " - Tracking");
-                    }
-                    else if (skeletonCap.isSkeletonCalibrating(users[i]))
-                    {
+                    } else if ( tracker.isSkeletonCalibrating(users[i] ) ) {
                         // Calibrating
                         label = new String(users[i] + " - Calibrating");
-                    }
-                    else
-                    {
+                    } else {
                         // Nothing
-                        label = new String(users[i] + " - Looking for pose (" + skeletonCap.getSkeletonCalibrationPose() + ")");
+                        label = new String(users[i] + " - Looking for pose (" + tracker.getSkeletonCalibrationPose() + ")" );
                     }
 
                     g.drawString(label, (int)com.getX(), (int)com.getY());
                 }
             }
-        } catch (StatusException e)
-        {
+        } catch (StatusException e) {
             e.printStackTrace();
         }
     }

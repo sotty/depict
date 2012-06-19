@@ -20,7 +20,6 @@
         <module>activity-recognition</module>
         <module>body-model</module>
         <module>kinect</module>
-        <module>trace-dumper</module>
     </modules>
 
 

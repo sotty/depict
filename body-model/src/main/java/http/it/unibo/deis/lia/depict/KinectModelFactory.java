@@ -56,7 +56,7 @@ public class KinectModelFactory {
         kBase.addKnowledgePackages( kBuilder.getKnowledgePackages() );
 
         KnowledgeSessionConfiguration ksConf = KnowledgeBaseFactory.newKnowledgeSessionConfiguration();
-        ksConf.setOption( ClockTypeOption.get("realtime") );
+        ksConf.setOption( ClockTypeOption.get( "realtime" ) );
         StatefulKnowledgeSession kSession = kBase.newStatefulKnowledgeSession( ksConf, null );
         kSession.fireAllRules();
 

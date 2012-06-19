@@ -4,6 +4,10 @@ import org.OpenNI.Point3D;
 import org.OpenNI.PoseDetectionStatus;
 import org.OpenNI.SkeletonJoint;
 import org.OpenNI.SkeletonJointPosition;
+import org.drools.event.ObjectInsertedEvent;
+import org.drools.event.ObjectRetractedEvent;
+import org.drools.event.ObjectUpdatedEvent;
+import org.drools.event.WorkingMemoryEventListener;
 import org.drools.runtime.StatefulKnowledgeSession;
 import org.drools.runtime.rule.FactHandle;
 import org.drools.runtime.rule.WorkingMemoryEntryPoint;
@@ -65,7 +69,7 @@ public class DroolsKinectModel extends MapKinectModel implements KinectModel {
         return kSession;
     }
 
-    public void setkSession(StatefulKnowledgeSession kSession) {
+    public void setkSession( StatefulKnowledgeSession kSession ) {
         this.kSession = kSession;
 
         kSession.setGlobal( "factory", new ObjectFactory() );
@@ -156,7 +160,7 @@ public class DroolsKinectModel extends MapKinectModel implements KinectModel {
         }
 
         if ( ! isValid() ) {
-            System.err.println( "Can't update joint, model not valid");
+            System.err.println( "Can't update joint, model not valid" );
             return;
         }
 
@@ -227,6 +231,11 @@ public class DroolsKinectModel extends MapKinectModel implements KinectModel {
 
     }
 
+
+
+
+
+
     public static class Coords {
         public int   id;
         public float x;
@@ -244,6 +253,22 @@ public class DroolsKinectModel extends MapKinectModel implements KinectModel {
 
         public int getId() {
             return id;
+        }
+
+        public float getX() {
+            return x;
+        }
+
+        public float getY() {
+            return y;
+        }
+
+        public float getZ() {
+            return z;
+        }
+
+        public float getA() {
+            return a;
         }
 
         @Override
