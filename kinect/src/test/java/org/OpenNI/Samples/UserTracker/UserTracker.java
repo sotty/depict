@@ -294,6 +294,7 @@ public class UserTracker extends Component
     	getJoint(user, SkeletonJoint.RIGHT_HIP);
         getJoint(user, SkeletonJoint.RIGHT_KNEE);
         getJoint(user, SkeletonJoint.RIGHT_FOOT);
+        
 
     }
     void drawLine(Graphics g, HashMap<SkeletonJoint, SkeletonJointPosition> jointHash, SkeletonJoint joint1, SkeletonJoint joint2)
